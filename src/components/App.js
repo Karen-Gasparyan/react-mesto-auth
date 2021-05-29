@@ -1,8 +1,12 @@
 import React, {useState, useEffect} from 'react';
 
-import Header from './Header';
+import Header from './Header/Header';
 import Main from './Main';
 import Footer from './Footer';
+
+import Login from './Login/Login';
+import Signin from './Signin/Signin';
+import Signup from './Signup/Signup';
 
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -178,9 +182,15 @@ function App() {
       <CurrentUserContext.Provider value={currentUser} >
         <div className="body">
           <div className="page">
-            <Header />
+            <Header component={Signup} />
+            {/*
+            <Signin />
+            <Signup />
+            */}
 
-            <Main
+            <Login
+               />
+            {/* <Main
               onEditAvatar={handleEditAvatarClick}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
@@ -219,7 +229,7 @@ function App() {
               title={messageText}
               isOpen={isMessagePopup}/>
 
-            <Footer />
+            <Footer /> */}
           </div>
         </div>
       </CurrentUserContext.Provider>

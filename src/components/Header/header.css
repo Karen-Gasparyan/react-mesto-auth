@@ -1,0 +1,16 @@
+.header__component {
+  align-items: center;
+  margin: 6px 30px 0 0;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: right;
+  color: #FFFFFF;
+}
+
+@media (min-width: 1024px) {
+  .header__component {
+    margin-right: 0;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

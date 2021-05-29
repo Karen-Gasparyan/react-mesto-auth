@@ -1,0 +1,14 @@
+.signin {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFF;
+}
+
+@media (min-width: 1024px) {
+  .signin {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

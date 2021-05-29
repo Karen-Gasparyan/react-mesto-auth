@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SpinnerContext from '../contexts/SpinnerContext';
-import Spinner from './spinner/Spinner';
+import Spinner from './Spinner/Spinner';
 
 
 function PopupWithForm({
