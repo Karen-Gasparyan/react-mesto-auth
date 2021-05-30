@@ -1,0 +1,21 @@
+.header-menu {
+  display: flex;
+  flex-direction: column;
+  min-height: 142px;
+  text-align: center;
+}
+
+.header-menu__email {
+  margin: 40px 0 18px 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #FFF;
+}
+
+.header-menu__out-btn {
+  margin: 0;
+  font-size: 18px;
+  line-height: 22px;
+  color: #A9A9A9;
+}

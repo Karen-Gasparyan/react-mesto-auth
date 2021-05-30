@@ -1,11 +1,11 @@
-.login {
+.register {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   max-width: 260px;
 }
 
-.login__title {
+.register__title {
   margin: 0 auto 40px;
   font-style: normal;
   font-weight: 900;
@@ -15,13 +15,22 @@
   color: #FFFFFF;
 }
 
+.register__text-question {
+  margin: 0 auto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #FFF;
+}
 
 @media (min-width: 1024px) {
-  .login {
+  .register {
     max-width: 358px;
   }
 
-  .login__title {
+  .register__title {
     font-size: 24px;
     line-height: 29px;
     margin: 0 auto 50px;

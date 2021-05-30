@@ -1,0 +1,9 @@
+.infoTooltip {
+  right: calc(50% - 13px);
+}
+
+@media (min-width: 768px) {
+  .infoTooltip{
+    right: -40px;
+  }
+}

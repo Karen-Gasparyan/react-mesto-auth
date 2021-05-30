@@ -1,10 +1,14 @@
 import React from 'react';
 
-function MessagePopup({title, isOpen}) {
+import doneIcon from '../images/infoTooltip-done.svg';
+import errorIcon from '../images/infoTooltip-error.svg';
+
+function MessagePopup({title, isOpen, messageIcon}) {
 
   return (
     <div className={`pop-up ${isOpen ? 'pop-up_opened' : ''}`}>
         <div className="pop-up__container">
+        <img src={messageIcon ? doneIcon : errorIcon} alt="" style={{width: '50px', height: '50px', margin: '0 auto 15px'}} />
           <h2
             className="pop-up__title"
             style={{margin: '0', textAlign: 'center'}} >
