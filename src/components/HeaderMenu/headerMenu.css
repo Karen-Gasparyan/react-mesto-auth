@@ -6,7 +6,7 @@
 }
 
 .header-menu__email {
-  margin: 40px 0 18px 0;
+  margin: 40px auto 18px;
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
@@ -14,8 +14,34 @@
 }
 
 .header-menu__out-btn {
-  margin: 0;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 60px;
   font-size: 18px;
   line-height: 22px;
   color: #A9A9A9;
+  background-color: #000;
+  border: none;
+}
+
+.header-menu__out-btn:hover {
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .header-menu {
+    min-height: 100%;
+    flex-direction: row;
+
+  }
+
+  .header-menu__email {
+    margin: 10px 24px 0 0;
+    
+  }
+
+  .header-menu__out-btn {
+    display: flex;
+    margin-top: 10px;
+  }
 }

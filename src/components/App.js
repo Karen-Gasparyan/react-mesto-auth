@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
+import {Redirect, Route, Switch, withRouter, useHistory} from 'react-router-dom';
 
-import HeaderMenu from './HeaderMenu/HeaderMenu';
 import Header from './Header/Header';
 import Main from './Main';
-import Footer from './Footer';
 
 import Login from './Login/Login';
 import Register from './Register/Register';
 import Signin from './Signin/Signin';
 import Signup from './Signup/Signup';
 import Loged from './Loged/Loged';
+import ProtectedRoute from './ProtectedRoute';
+
+import * as auth from './auth';
 
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -25,9 +27,12 @@ import api from '../utils/api';
 
 function App() {
   /* States */
+  const history = useHistory();
 
   // User info
   const [currentUser, setCurrentUser ] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [userEmail, setUserEmail] = useState('');
 
   // Header Menu
   const [visibleHeaderMenu, setVisibleHeaderMenu] = useState(false);
@@ -38,7 +43,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isMessagePopup, setIsMessagePopup] = useState(false);
-  const [isInfoTooltip, setIsInfoTooltip] = useState(true);
+  const [isInfoTooltip, setIsInfoTooltip] = useState(false);
+  const [isInfoTooltipStatus, setIsInfoTooltipStatus] = useState(false);
   const [loading, setLoading] = useState(false);
   const [messageText, setMessageText] = useState('');
   const [messageIcon, setMessageIcon] = useState(null);
@@ -56,20 +62,25 @@ function App() {
   const [passwordError, setPasswordError] = useState('');
   const [authDirty, setAuthDirty] = useState(false);
   const [validForm, setValidForm] = useState(false);
-
-  const authData = {
-    email,
-    password,
-    emailError,
-    passwordError,
-    authDirty,
-    validForm,
-    handleChangeEmail,
-    handleChangePassword,
-    blurHandler,
-    handleSubmit
-  };
   /* /States */
+
+
+  /* token verification */
+  useEffect(()=> {
+    if(localStorage.getItem('jwt')) {
+    const jwt = localStorage.getItem('jwt');
+      auth.getContent(jwt)
+        .then(res => {
+          if(res) {
+            setUserEmail(res.data.email);
+            setLoggedIn(true);
+            // history.push('/');
+          }
+        })
+        .catch(error => console.log(error));
+    }
+  });
+  /* /token verification */
 
 
   /* cards */
@@ -205,6 +216,7 @@ function App() {
     setTimeout(hideMessage, 1500);
   }
 
+
   const handleCardClick =(name, link)=> {
     setSelectedCard({
       isOpen: true,
@@ -219,6 +231,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsInfoTooltip(false);
 
+    // setAuthMessage(false);
     setSelectedCard({});
     setLoading(false);
     setResetForms(true);
@@ -271,7 +284,38 @@ function App() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('ok!')
+
+    if(e.target.name === 'authorize') {
+      auth.authorize(email, password)
+        .then(token => {
+          if(token) {
+            setEmail('');
+            setPassword('');
+            setLoggedIn(true);
+            history.push('/');
+          } else {
+            setIsInfoTooltip(true);
+            setIsInfoTooltipStatus(false);
+          }
+        })
+      .catch(error => console.log(error));
+    };
+
+    if(e.target.name === 'register') {
+      auth.register(email, password)
+      .then(({data}) => {
+        if(data) {
+          setIsInfoTooltip(true);
+          setIsInfoTooltipStatus(true);
+          history.push('/signin');
+        } else {
+          setIsInfoTooltip(true);
+          setIsInfoTooltipStatus(false);
+        }
+      })
+      .catch(error => console.log(error));
+    };
+    
   };
   /* /Auth */
 
@@ -287,36 +331,89 @@ function App() {
     }
   }
 
-  
+
+  const signOut =()=> {
+
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    setUserEmail('');
+    
+    history.push('/');
+  }
+
+
+  const authData = {
+    email,
+    password,
+    emailError,
+    passwordError,
+    authDirty,
+    validForm,
+    handleChangeEmail,
+    handleChangePassword,
+    blurHandler,
+    handleSubmit
+  };
+
 
   return (
     <SpinnerContext.Provider value={loading} >
       <CurrentUserContext.Provider value={currentUser} >
         <div className="body">
           <div className="page">
-            {visibleHeaderMenu ? (<HeaderMenu />) : null}
 
-            <Header component={Loged} changeHeaderMenu={changeHeaderMenu} headerMenuBurger={headerMenuBurger}  />
-            {/*
-            <Signin />
-            <Signup />
-            <Loged />
-            */}
+            {loggedIn ? 
+            (<Header
+              component={Loged}
+              userEmail={userEmail}
+              loggedIn={loggedIn}
+              visibleHeaderMenu={visibleHeaderMenu}
+              signOut={signOut}
+              changeHeaderMenu={changeHeaderMenu}
+              headerMenuBurger={headerMenuBurger} />) : null}
+            
+              <Switch>
+                <Route path='/signup'>
+                  <Register
+                    authData={authData}
+                    component={Signin}
+                    userEmail={userEmail}
+                    loggedIn={loggedIn}
+                    visibleHeaderMenu={visibleHeaderMenu}
+                    signOut={signOut}
+                    changeHeaderMenu={changeHeaderMenu}
+                    headerMenuBurger={headerMenuBurger} />
+                </Route>
 
+                <Route path='/signin'>
+                  <Login
+                    authData={authData}
+                    component={Signup}
+                    userEmail={userEmail}
+                    loggedIn={loggedIn}
+                    visibleHeaderMenu={visibleHeaderMenu}
+                    signOut={signOut}
+                    changeHeaderMenu={changeHeaderMenu}
+                    headerMenuBurger={headerMenuBurger} />
+                </Route>
 
-              {/* <Register authData={authData} /> */}
-              {/* <Login authData={authData} /> */}
+                <ProtectedRoute
+                  path="/"
+                  component={Main}
+                  loggedIn={loggedIn}
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardClick={handleCardClick} 
+                  cards={cards}
+                  cardsError={cardsError}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete} />
 
-
-            <Main
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onCardClick={handleCardClick} 
-              cards={cards}
-              cardsError={cardsError}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete} />
+                <Route>
+                  {loggedIn ? <Redirect to='/' /> : <Redirect to='/signin' />}
+                </Route>
+              </Switch>
 
             <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
@@ -348,12 +445,11 @@ function App() {
               title={messageText}
               isOpen={isMessagePopup} />
 
-            {/* <InfoTooltip
+            <InfoTooltip
               isOpen={isInfoTooltip}
-              done={true}
-              onClose={closeAllPopups} /> */}
-
-            <Footer />
+              isDone={isInfoTooltipStatus}
+              onClose={closeAllPopups} />
+            
           </div>
         </div>
       </CurrentUserContext.Provider>
@@ -361,4 +457,4 @@ function App() {
   );
 };
 
-export default App;
+export default withRouter(App);

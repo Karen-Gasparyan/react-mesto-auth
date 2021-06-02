@@ -4,12 +4,12 @@ import './infoTooltip.css';
 import doneIcon from '../../images/infoTooltip-done.svg';
 import errorIcon from '../../images/infoTooltip-error.svg';
 
-const InfoTooltip =({isOpen, done, onClose})=> {
+const InfoTooltip =({isOpen, isDone, onClose})=> {
 
   return (
     <div className={`pop-up ${isOpen ? 'pop-up_opened' : ''}`}>
         <div className="pop-up__container">
-          <img src={done ? doneIcon : errorIcon} alt="" 
+          <img src={isDone ? doneIcon : errorIcon} alt="" 
             style={{
               width: '120px',
               height: '120px',
@@ -19,7 +19,7 @@ const InfoTooltip =({isOpen, done, onClose})=> {
             style={{
               textAlign: 'center',
               marginBottom: '25px'}} >
-            {done ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+            {isDone ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
           </h2>
           <button
             type="button"

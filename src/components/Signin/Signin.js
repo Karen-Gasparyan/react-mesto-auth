@@ -1,11 +1,13 @@
 import React from 'react';
 
+import {Link} from 'react-router-dom';
+
 import './signin.css';
 
 
 const Signin =()=> {
   return (
-    <span className="signin">Войти</span>
+    <Link to="/signin" className="signin">Войти</Link>
   )
 }
 

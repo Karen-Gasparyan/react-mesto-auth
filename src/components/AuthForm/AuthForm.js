@@ -14,11 +14,12 @@ const AuthForm =(
     handleChangeEmail,
     handleChangePassword,
     blurHandler,
-    handleSubmit
-  }, submitButtonText })=> {
+    handleSubmit,
+  }, submitButtonText, name })=> {
 
   return (
     <form
+      name={name}
       className="auth__form"
       onSubmit={handleSubmit} >
       <div className="auth__inputs-wrapper">
