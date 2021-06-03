@@ -1,5 +1,6 @@
-.signup {
-  margin: 10px 0 0 0;
+.auth-button {
+  height: 100%;
+  margin: 5px 30px 0 0;
   text-decoration: none;
   font-style: normal;
   font-weight: normal;
@@ -12,13 +13,14 @@
   transition: .5s;
 }
 
-.signup:hover {
+.auth-button:hover {
   opacity: .6;
 }
 
 @media (min-width: 1024px) {
-  .signup {
+  .auth-button {
     font-size: 18px;
     line-height: 22px;
+    margin: 10px 0 0 0;
   }
 }

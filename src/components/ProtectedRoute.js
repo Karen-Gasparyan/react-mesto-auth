@@ -6,7 +6,6 @@ import Footer from './Footer';
 
 
 const ProtectedRoute = ({ component: Component, ...props  }) => {
-  
   return (
     <>
     <Route>
@@ -16,7 +15,9 @@ const ProtectedRoute = ({ component: Component, ...props  }) => {
     </Route>
 
     <Route>
-      <Footer />
+      {
+        ()=> props.loggedIn ? <Footer /> : null
+      }
     </Route>
     </>
 )}

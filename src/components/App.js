@@ -1,17 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {Redirect, Route, Switch, withRouter, useHistory} from 'react-router-dom';
+import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
 
 import Header from './Header/Header';
 import Main from './Main';
 
 import Login from './Login/Login';
 import Register from './Register/Register';
-import Signin from './Signin/Signin';
-import Signup from './Signup/Signup';
 import Loged from './Loged/Loged';
 import ProtectedRoute from './ProtectedRoute';
-
-import * as auth from './auth';
 
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -22,7 +18,9 @@ import InfoTooltip from './InfoTooltip/InfoTooltip';
 
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import SpinnerContext from '../contexts/SpinnerContext';
+
 import api from '../utils/api';
+import auth from '../utils/auth';
 
 
 function App() {
@@ -32,7 +30,7 @@ function App() {
   // User info
   const [currentUser, setCurrentUser ] = useState({});
   const [loggedIn, setLoggedIn] = useState(false)
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(null);
 
   // Header Menu
   const [visibleHeaderMenu, setVisibleHeaderMenu] = useState(false);
@@ -44,7 +42,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isMessagePopup, setIsMessagePopup] = useState(false);
   const [isInfoTooltip, setIsInfoTooltip] = useState(false);
-  const [isInfoTooltipStatus, setIsInfoTooltipStatus] = useState(false);
+  const [isInfoTooltipStatus, setIsInfoTooltipIcon] = useState(null);
   const [loading, setLoading] = useState(false);
   const [messageText, setMessageText] = useState('');
   const [messageIcon, setMessageIcon] = useState(null);
@@ -58,6 +56,9 @@ function App() {
   // Auth
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginPage, setLoginPage] = useState(false);
+  
+  // validation
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [authDirty, setAuthDirty] = useState(false);
@@ -65,22 +66,45 @@ function App() {
   /* /States */
 
 
-  /* token verification */
+  /* validation */
   useEffect(()=> {
-    if(localStorage.getItem('jwt')) {
-    const jwt = localStorage.getItem('jwt');
-      auth.getContent(jwt)
-        .then(res => {
-          if(res) {
-            setUserEmail(res.data.email);
-            setLoggedIn(true);
-            // history.push('/');
-          }
-        })
-        .catch(error => console.log(error));
+    if (!email || !password || emailError || passwordError) {
+      setValidForm(false);
+    } else {
+      setValidForm(true);
     }
-  });
-  /* /token verification */
+  }, [email, password, emailError, passwordError])
+
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+
+    if((e.target.name === 'email' && e.target.value.length < 6)) {
+      setEmailError('Email не должен содержать менее 6 символов');
+      setAuthDirty(true);
+    } else {
+      setEmailError('');
+    }
+  };
+
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
+
+    if((e.target.name === 'password' && e.target.value.length < 8)) {
+      setPasswordError('Пароль не должен содержать менее 8 символов');
+      setAuthDirty(true);
+    } else {
+      setPasswordError('');
+    }
+  }
+
+  function blurHandler(e) {
+    if (!e.target.value && e.target.name === 'email') {
+      setEmailError('Поле не может быть пустым');
+    } else if (!e.target.value && e.target.name === 'password') {
+      setPasswordError('Поле не может быть пустым');
+    }
+  };
+  /* validation */
 
 
   /* cards */
@@ -89,7 +113,6 @@ function App() {
       .then(data => setCards(data))
       .catch(error => setCardsError(`${error} - Something went wrong`));
   }, []);
-
 
   function handleCardLike(selectedСardLikes, selectedСardID) {
     const isLiked = selectedСardLikes.some(otherUsers => otherUsers._id === currentUser._id);
@@ -102,7 +125,6 @@ function App() {
     .catch(error => handleMessagePopup(`Something went wrong - ${error}`));
     setMessageIcon(false);
   };
-
 
   function handleCardDelete(selectedСardID) {
     api.deleteCard(selectedСardID)
@@ -118,7 +140,6 @@ function App() {
         setMessageIcon(false);
       });
   };
-
 
   function handleAddPlaceSubmit(newPlaceData) {
     setLoading(true);
@@ -153,7 +174,6 @@ function App() {
       });
   }, []);
 
-
   function handleUpdateAvatar(link) {
     setLoading(true);
 
@@ -169,7 +189,6 @@ function App() {
         setLoading(false);
       });
   };
-
 
   function handleUpdateUser({userName, about}) {
     setLoading(true);
@@ -216,7 +235,6 @@ function App() {
     setTimeout(hideMessage, 1500);
   }
 
-
   const handleCardClick =(name, link)=> {
     setSelectedCard({
       isOpen: true,
@@ -230,121 +248,36 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsInfoTooltip(false);
+    setIsInfoTooltipIcon(false);
 
-    // setAuthMessage(false);
     setSelectedCard({});
     setLoading(false);
     setResetForms(true);
+    setMessageText('');
   };
   /* /popup's */
 
 
-  /* Auth */
+  /* token verification */
   useEffect(()=> {
-    if (!email || !password || emailError || passwordError) {
-      setValidForm(false);
-    } else {
-      setValidForm(true);
-    }
-  }, [email, password, emailError, passwordError])
+    if(localStorage.getItem('jwt')) {
 
-
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-
-    if((e.target.name === 'email' && e.target.value.length < 6)) {
-      setEmailError('Email не должен содержать менее 6 символов');
-      setAuthDirty(true);
-    } else {
-      setEmailError('');
-    }
-  };
-
-
-  function handleChangePassword(e) {
-    setPassword(e.target.value);
-
-    if((e.target.name === 'password' && e.target.value.length < 8)) {
-      setPasswordError('Пароль не должен содержать менее 8 символов');
-      setAuthDirty(true);
-    } else {
-      setPasswordError('');
-    }
-  }
-
-  
-  function blurHandler(e) {
-    if (!e.target.value && e.target.name === 'email') {
-      setEmailError('Поле не может быть пустым');
-    } else if (!e.target.value && e.target.name === 'password') {
-      setPasswordError('Поле не может быть пустым');
-    }
-  };
-
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    if(e.target.name === 'authorize') {
-      auth.authorize(email, password)
-        .then(token => {
-          if(token) {
-            setEmail('');
-            setPassword('');
+      const jwt = localStorage.getItem('jwt');
+      
+        auth.getContent(jwt)
+          .then(({data}) => {
+            setUserEmail(data.email);
             setLoggedIn(true);
             history.push('/');
-          } else {
-            setIsInfoTooltip(true);
-            setIsInfoTooltipStatus(false);
-          }
-        })
-      .catch(error => console.log(error));
-    };
-
-    if(e.target.name === 'register') {
-      auth.register(email, password)
-      .then(({data}) => {
-        if(data) {
-          setIsInfoTooltip(true);
-          setIsInfoTooltipStatus(true);
-          history.push('/signin');
-        } else {
-          setIsInfoTooltip(true);
-          setIsInfoTooltipStatus(false);
-        }
-      })
-      .catch(error => console.log(error));
-    };
-    
-  };
-  /* /Auth */
-
-
-
-  const changeHeaderMenu =()=> {
-    if(!visibleHeaderMenu && headerMenuBurger) {
-      setVisibleHeaderMenu(true);
-      setHeaderMenuBurger(false);
-    } else {
-      setVisibleHeaderMenu(false);
-      setHeaderMenuBurger(true);
+          })
+          .catch(errorMessage => console.log(errorMessage));
     }
-  }
+  }, [history]);
+  /* /token verification */
 
 
-  const signOut =()=> {
-
-    localStorage.removeItem('jwt');
-    setLoggedIn(false);
-    setUserEmail('');
-    
-    history.push('/');
-  }
-
-
+  /* Auth */
   const authData = {
-    email,
-    password,
     emailError,
     passwordError,
     authDirty,
@@ -355,6 +288,74 @@ function App() {
     handleSubmit
   };
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if(e.target.name === 'authorize') {
+      auth.authorize(email, password)
+      .then(({token}) => {
+        if(token) {
+          localStorage.setItem('jwt', token);
+          setUserEmail(email);
+          setLoggedIn(true);
+          history.push('/');
+          return token;
+        }
+      }
+    )
+    .catch(errorMessage => {
+      setIsInfoTooltip(true);
+      setIsInfoTooltipIcon(false);
+      setMessageText(errorMessage);
+    });
+    };
+
+    if(e.target.name === 'register') {
+      auth.register(email, password)
+      .then(({data}) => {
+        if(data) {
+          setUserEmail(data.email);
+          setIsInfoTooltip(true);
+          setIsInfoTooltipIcon(true);
+          setMessageText('Вы успешно зарегистрировались!');
+          history.push('/signin');
+        }
+      })
+      .catch(() => {
+        setIsInfoTooltip(true);
+        setIsInfoTooltipIcon(false);
+        setMessageText('Некорректно заполнено одно из полей!');
+      });
+    };
+  };
+
+  const signOut =()=> {
+
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    setUserEmail('');
+    
+    history.push('/');
+  }
+
+  const handleChangeLoginPage =()=> {
+    setLoginPage(false);
+  }
+  /* /Auth */
+
+
+  /* helpers */
+  const changeHeaderMenu =()=> {
+    if(!visibleHeaderMenu && headerMenuBurger) {
+      setVisibleHeaderMenu(true);
+      setHeaderMenuBurger(false);
+    } else {
+      setVisibleHeaderMenu(false);
+      setHeaderMenuBurger(true);
+    }
+  }
+  /* /helpers */
+
 
   return (
     <SpinnerContext.Provider value={loading} >
@@ -362,41 +363,28 @@ function App() {
         <div className="body">
           <div className="page">
 
-            {loggedIn ? 
-            (<Header
+            <Header
               component={Loged}
               userEmail={userEmail}
               loggedIn={loggedIn}
               visibleHeaderMenu={visibleHeaderMenu}
               signOut={signOut}
               changeHeaderMenu={changeHeaderMenu}
-              headerMenuBurger={headerMenuBurger} />) : null}
-            
+              headerMenuBurger={headerMenuBurger}
+              loginPage={loginPage}
+              handleChangeLoginPage={handleChangeLoginPage} />
+
+            <Route path='/signup'>
+              <Register authData={authData} />
+            </Route>
+
+            <Route path='/signin'>
+              <Login
+                authData={authData}
+                setLoginPage={setLoginPage} />
+            </Route>
+
               <Switch>
-                <Route path='/signup'>
-                  <Register
-                    authData={authData}
-                    component={Signin}
-                    userEmail={userEmail}
-                    loggedIn={loggedIn}
-                    visibleHeaderMenu={visibleHeaderMenu}
-                    signOut={signOut}
-                    changeHeaderMenu={changeHeaderMenu}
-                    headerMenuBurger={headerMenuBurger} />
-                </Route>
-
-                <Route path='/signin'>
-                  <Login
-                    authData={authData}
-                    component={Signup}
-                    userEmail={userEmail}
-                    loggedIn={loggedIn}
-                    visibleHeaderMenu={visibleHeaderMenu}
-                    signOut={signOut}
-                    changeHeaderMenu={changeHeaderMenu}
-                    headerMenuBurger={headerMenuBurger} />
-                </Route>
-
                 <ProtectedRoute
                   path="/"
                   component={Main}
@@ -447,8 +435,9 @@ function App() {
 
             <InfoTooltip
               isOpen={isInfoTooltip}
+              onClose={closeAllPopups}
               isDone={isInfoTooltipStatus}
-              onClose={closeAllPopups} />
+              messageText={messageText} />
             
           </div>
         </div>
@@ -457,4 +446,4 @@ function App() {
   );
 };
 
-export default withRouter(App);
+export default App;

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import './infoTooltip.css';
+import './InfoTooltip.css';
 import doneIcon from '../../images/infoTooltip-done.svg';
 import errorIcon from '../../images/infoTooltip-error.svg';
 
-const InfoTooltip =({isOpen, isDone, onClose})=> {
+const InfoTooltip =({isOpen, onClose, isDone, messageText})=> {
 
   return (
     <div className={`pop-up ${isOpen ? 'pop-up_opened' : ''}`}>
@@ -19,7 +19,7 @@ const InfoTooltip =({isOpen, isDone, onClose})=> {
             style={{
               textAlign: 'center',
               marginBottom: '25px'}} >
-            {isDone ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+            {messageText}
           </h2>
           <button
             type="button"

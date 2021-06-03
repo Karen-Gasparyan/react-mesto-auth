@@ -1,8 +1,12 @@
 import React from 'react';
 
-import HeaderMenu from '../HeaderMenu/HeaderMenu';
+import Logo from '../Logo/Logo';
+import UserProfile from '../UserProfile/UserProfile';
+import BurgerMenu from '../BurgerMenu/BurgerMenu';
+import MyProfile from '../MyProfile/MyProfile';
+import AuthButton from '../AuthButton/AuthButton';
 
-import './header.css';
+import './Header.css';
 
 
 function Header({
@@ -12,40 +16,30 @@ function Header({
   visibleHeaderMenu,
   signOut,
   changeHeaderMenu,
-  headerMenuBurger
+  headerMenuBurger,
+  loginPage,
+  handleChangeLoginPage
 }) {
 
   return (
     <>
+      {(loggedIn && visibleHeaderMenu) ? <MyProfile userEmail={userEmail} signOut={signOut} /> : null}
       <div className="header page__header">
 
-        <div className="header__logo"></div>
-        <div className="header__component">
-          
-        </div>
+        <Logo />
+        
+        <UserProfile loggedIn={loggedIn} userEmail={userEmail} signOut={signOut} />
 
+        {loggedIn ? (<BurgerMenu
+                      component={Component}
+                      loggedIn={loggedIn}
+                      changeHeaderMenu={changeHeaderMenu}
+                      headerMenuBurger={headerMenuBurger} />) : null}
+
+        {!loggedIn ? <AuthButton loginPage={loginPage} handleChangeLoginPage={handleChangeLoginPage} /> : null}
       </div>
-
-      
     </>
   )
 }
 
 export default Header;
-
-
-{/* <>
-  <div className="my-profile">
-    {(loggedIn && visibleHeaderMenu) ? (<HeaderMenu userEmail={userEmail} signOut={signOut} />) : null}
-  </div>
-
-  <div className="header page__header">
-    <div className="header__logo"></div>
-    <div className="header__items">
-      {loggedIn ? <HeaderMenu signOut={signOut} userEmail={userEmail} /> : <Component /> }
-    </div>
-    <div className="header__component">
-      {loggedIn ? <Component changeHeaderMenu={changeHeaderMenu} headerMenuBurger={headerMenuBurger} /> : null }
-    </div>
-  </div>
-</> */}

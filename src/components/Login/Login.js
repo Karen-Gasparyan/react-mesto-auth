@@ -1,41 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
-import Header from '../Header/Header';
 import AuthForm from '../AuthForm/AuthForm';
 
-import './login.css';
+import './Login.css';
 
 
-const Login =(
-  { authData,
-    component,
-    userEmail,
-    loggedIn,
-    visibleHeaderMenu,
-    signOut,
-    changeHeaderMenu,
-    headerMenuBurger
-  })=> {
+const Login =({authData, setLoginPage})=> {
+
+  useEffect(()=> {
+    setLoginPage(true);
+  })
 
   return (
-    <>
-      <Header 
-        component={component}
-        userEmail={userEmail}
-        loggedIn={loggedIn}
-        visibleHeaderMenu={visibleHeaderMenu}
-        signOut={signOut}
-        changeHeaderMenu={changeHeaderMenu}
-        headerMenuBurger={headerMenuBurger} />
-
-      <div className="login">
-        <h2 className="login__title">Вход</h2>
-          <AuthForm
-            name={'authorize'}
-            authData={authData}
-            submitButtonText={'Войти'} />
-      </div>
-    </>
+    <div className="login">
+      <h2 className="login__title">Вход</h2>
+        <AuthForm
+          authData={authData}
+          name={'authorize'}
+          submitButtonText={'Войти'} />
+    </div>
   )
 }
 

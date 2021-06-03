@@ -1,12 +1,10 @@
 import React from 'react';
 
-import './authForm.css';
+import './AuthForm.css';
 
 
 const AuthForm =(
   {authData: {
-    email,
-    password,
     emailError,
     passwordError,
     authDirty,
@@ -14,7 +12,7 @@ const AuthForm =(
     handleChangeEmail,
     handleChangePassword,
     blurHandler,
-    handleSubmit,
+    handleSubmit
   }, submitButtonText, name })=> {
 
   return (
@@ -32,7 +30,6 @@ const AuthForm =(
             minLength="6"
             autoComplete="off"
             placeholder="Email"
-            value={email}
             onBlur={blurHandler}
             onChange={handleChangeEmail} />
           {(authDirty && emailError) && <span id="email-error" className="error">{emailError}</span> }
@@ -47,7 +44,6 @@ const AuthForm =(
             maxLength="50"
             autoComplete="off"
             placeholder="Пароль"
-            value={password}
             onBlur={blurHandler}
             onChange={handleChangePassword} />
           {(authDirty && passwordError) && <span id="password-error" className="error">{passwordError}</span> }
