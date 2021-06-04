@@ -3,7 +3,7 @@ import React from 'react';
 import burgerMenu from '../../images/burger-menu.svg';
 import closeMenuBtn from '../../images/close-menu-Icon.svg';
 
-import './Loged.css';
+import './loged.css';
 
 
 const Loged =({changeHeaderMenu, headerMenuBurger})=> {

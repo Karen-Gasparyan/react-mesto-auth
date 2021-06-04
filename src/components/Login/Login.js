@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 
 import AuthForm from '../AuthForm/AuthForm';
 
-import './Login.css';
+import './login.css';
 
 
 const Login =({authData, setLoginPage})=> {

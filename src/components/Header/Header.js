@@ -6,7 +6,7 @@ import BurgerMenu from '../BurgerMenu/BurgerMenu';
 import MyProfile from '../MyProfile/MyProfile';
 import AuthButton from '../AuthButton/AuthButton';
 
-import './Header.css';
+import './header.css';
 
 
 function Header({

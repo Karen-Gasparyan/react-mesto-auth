@@ -2,7 +2,7 @@ import React from 'react';
 
 import AuthForm from '../AuthForm/AuthForm';
 
-import './Register.css';
+import './register.css';
 
 
 const Register =({authData})=> {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './AuthForm.css';
+import './authForm.css';
 
 
 const AuthForm =(

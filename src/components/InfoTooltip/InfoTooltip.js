@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './InfoTooltip.css';
+import './infoTooltip.css';
 import doneIcon from '../../images/infoTooltip-done.svg';
 import errorIcon from '../../images/infoTooltip-error.svg';
 
