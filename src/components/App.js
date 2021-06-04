@@ -3,6 +3,7 @@ import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
 
 import Header from './Header/Header';
 import Main from './Main';
+import Footer from './Footer';
 
 import Login from './Login/Login';
 import Register from './Register/Register';
@@ -278,20 +279,18 @@ function App() {
 
   /* Auth */
   const authData = {
+    email,
+    password,
     emailError,
     passwordError,
     authDirty,
     validForm,
     handleChangeEmail,
     handleChangePassword,
-    blurHandler,
-    handleSubmit
+    blurHandler
   };
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    if(e.target.name === 'authorize') {
+  function handleSubmitLogin() {
       auth.authorize(email, password)
       .then(({token}) => {
         if(token) {
@@ -308,9 +307,9 @@ function App() {
       setIsInfoTooltipIcon(false);
       setMessageText(errorMessage);
     });
-    };
+  }
 
-    if(e.target.name === 'register') {
+  function handleSubmitRegister() {
       auth.register(email, password)
       .then(({data}) => {
         if(data) {
@@ -318,6 +317,7 @@ function App() {
           setIsInfoTooltip(true);
           setIsInfoTooltipIcon(true);
           setMessageText('Вы успешно зарегистрировались!');
+          resetAuthForms();
           history.push('/signin');
         }
       })
@@ -327,19 +327,22 @@ function App() {
         setMessageText('Некорректно заполнено одно из полей!');
       });
     };
-  };
 
   const signOut =()=> {
-
     localStorage.removeItem('jwt');
     setLoggedIn(false);
+    resetAuthForms();
     setUserEmail('');
-    
     history.push('/');
   }
 
   const handleChangeLoginPage =()=> {
     setLoginPage(false);
+  }
+
+  const resetAuthForms =()=> {
+    setEmail('');
+    setPassword('');
   }
   /* /Auth */
 
@@ -374,18 +377,22 @@ function App() {
               loginPage={loginPage}
               handleChangeLoginPage={handleChangeLoginPage} />
 
-            <Route path='/signup'>
-              <Register authData={authData} />
-            </Route>
-
-            <Route path='/signin'>
-              <Login
-                authData={authData}
-                setLoginPage={setLoginPage} />
-            </Route>
-
               <Switch>
+                <Route path='/signin'>
+                  <Login
+                    authData={authData}
+                    handleSubmitLogin={handleSubmitLogin}
+                    setLoginPage={setLoginPage} />
+                </Route>
+
+                <Route path='/signup'>
+                  <Register
+                    authData={authData}
+                    handleSubmitRegister={handleSubmitRegister} />
+                </Route>
+
                 <ProtectedRoute
+                  exact
                   path="/"
                   component={Main}
                   loggedIn={loggedIn}
@@ -402,6 +409,8 @@ function App() {
                   {loggedIn ? <Redirect to='/' /> : <Redirect to='/signin' />}
                 </Route>
               </Switch>
+
+            <Footer />
 
             <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}

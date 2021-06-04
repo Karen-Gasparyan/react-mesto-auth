@@ -12,7 +12,9 @@ const Loged =({changeHeaderMenu, headerMenuBurger})=> {
     <button
       className="loged__switch-button"
       onClick={changeHeaderMenu} >
-      <img src={headerMenuBurger ? burgerMenu : closeMenuBtn} alt="" />
+      <img
+        src={headerMenuBurger ? burgerMenu : closeMenuBtn}
+        alt={headerMenuBurger ? 'Раскрыть меню' : 'Свернуть меню'} />
     </button>
   )
 }

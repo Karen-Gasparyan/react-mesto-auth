@@ -9,23 +9,18 @@ const InfoTooltip =({isOpen, onClose, isDone, messageText})=> {
   return (
     <div className={`pop-up ${isOpen ? 'pop-up_opened' : ''}`}>
         <div className="pop-up__container">
-          <img src={isDone ? doneIcon : errorIcon} alt="" 
-            style={{
-              width: '120px',
-              height: '120px',
-              margin: '25px auto 40px'}} />
-          <h2
-            className="pop-up__title"
-            style={{
-              textAlign: 'center',
-              marginBottom: '25px'}} >
-            {messageText}
-          </h2>
+          <img
+            src={isDone ? doneIcon : errorIcon}
+            alt={isDone ? 'Успешно' : 'Ошибка'} 
+            className="infoTooltip-icon" />
+
+          <h2 className="pop-up__title infoTooltip-title" >{messageText}</h2>
+
           <button
             type="button"
             aria-label="Кнопка закрытия модального окна"
             title="Закрыть"
-            className="pop-up__close-btn infoTooltip"
+            className="pop-up__close-btn infoTooltip-button"
             onClick={onClose} >
           </button>
       </div>

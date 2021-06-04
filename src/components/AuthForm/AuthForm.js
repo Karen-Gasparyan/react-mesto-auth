@@ -5,6 +5,8 @@ import './authForm.css';
 
 const AuthForm =(
   {authData: {
+    email,
+    password,
     emailError,
     passwordError,
     authDirty,
@@ -12,14 +14,17 @@ const AuthForm =(
     handleChangeEmail,
     handleChangePassword,
     blurHandler,
-    handleSubmit
-  }, submitButtonText, name })=> {
+  },
+    submitButtonText,
+    onSubmit,
+    name
+  })=> {
 
   return (
     <form
       name={name}
       className="auth__form"
-      onSubmit={handleSubmit} >
+      onSubmit={onSubmit} >
       <div className="auth__inputs-wrapper">
         <div className="auth__input-wrapper">
           <input 
@@ -31,6 +36,7 @@ const AuthForm =(
             autoComplete="off"
             placeholder="Email"
             onBlur={blurHandler}
+            value={email}
             onChange={handleChangeEmail} />
           {(authDirty && emailError) && <span id="email-error" className="error">{emailError}</span> }
         </div>
@@ -45,6 +51,7 @@ const AuthForm =(
             autoComplete="off"
             placeholder="Пароль"
             onBlur={blurHandler}
+            value={password}
             onChange={handleChangePassword} />
           {(authDirty && passwordError) && <span id="password-error" className="error">{passwordError}</span> }
         </div>

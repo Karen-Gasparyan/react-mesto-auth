@@ -10,11 +10,9 @@ function AddPlacePopup({
   loading,
   resetForms
 }) {
+  
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
-
-              /*        Спасибо за отличное ревью! За замечание по поводу валидации.
-                        Разберусь с ней чуть позже, иначе ничего не успею ;).          */
 
   const [placeNameError, setPlaceNameError] = useState('');
   const [placeLinkError, setPlaceLinkError] = useState('');
