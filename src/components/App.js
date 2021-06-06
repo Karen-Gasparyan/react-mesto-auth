@@ -15,6 +15,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import MessagePopup from './MessagePopup';
+import LoadingMessage from './LoadingMessage/LoadingMessage';
 import InfoTooltip from './InfoTooltip/InfoTooltip';
 
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -42,6 +43,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isMessagePopup, setIsMessagePopup] = useState(false);
+  const [isLoadingMessage, setIsLoadingMessage] = useState(false);
   const [isInfoTooltip, setIsInfoTooltip] = useState(false);
   const [isInfoTooltipStatus, setIsInfoTooltipIcon] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -249,7 +251,6 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsInfoTooltip(false);
-    setIsInfoTooltipIcon(false);
 
     setSelectedCard({});
     setLoading(false);
@@ -291,11 +292,14 @@ function App() {
   };
 
   function handleSubmitLogin() {
+    setIsLoadingMessage(true);
+
       auth.authorize(email, password)
       .then(({token}) => {
         if(token) {
           localStorage.setItem('jwt', token);
           setUserEmail(email);
+          setIsLoadingMessage(false);
           setLoggedIn(true);
           history.push('/');
           return token;
@@ -303,8 +307,9 @@ function App() {
       }
     )
     .catch(errorMessage => {
-      setIsInfoTooltip(true);
       setIsInfoTooltipIcon(false);
+      setIsLoadingMessage(false);
+      setIsInfoTooltip(true);
       setMessageText(errorMessage);
     });
   }
@@ -314,17 +319,17 @@ function App() {
       .then(({data}) => {
         if(data) {
           setUserEmail(data.email);
-          setIsInfoTooltip(true);
           setIsInfoTooltipIcon(true);
           setMessageText('Вы успешно зарегистрировались!');
+          setIsInfoTooltip(true);
           resetAuthForms();
           history.push('/signin');
         }
       })
       .catch(() => {
-        setIsInfoTooltip(true);
         setIsInfoTooltipIcon(false);
         setMessageText('Некорректно заполнено одно из полей!');
+        setIsInfoTooltip(true);
       });
     };
 
@@ -441,6 +446,9 @@ function App() {
               messageIcon={messageIcon}
               title={messageText}
               isOpen={isMessagePopup} />
+
+            <LoadingMessage
+              isOpen={isLoadingMessage} />
 
             <InfoTooltip
               isOpen={isInfoTooltip}
