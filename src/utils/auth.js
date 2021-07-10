@@ -4,7 +4,7 @@ class Auth {
   }
 
   register =(email, password)=> {
-    return fetch(`${this.BASE_URL}/signup`, {
+    return fetch(`${this.BASE_URL}signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -15,7 +15,7 @@ class Auth {
   }
 
   authorize =(email, password)=> {
-    return fetch(`${this.BASE_URL}/signin`, {
+    return fetch(`${this.BASE_URL}signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ class Auth {
   }
 
   getContent =(token)=> {
-    return fetch(`${this.BASE_URL}/users/me`, {
+    return fetch(`${this.BASE_URL}users/me`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -53,6 +53,6 @@ class Auth {
   }
 }
 
-const auth = new Auth('https://auth.nomoreparties.co.');
-
+const auth = new Auth('http://api.yp.gks.mesto.nomoredomains.monster/');
+// https://auth.nomoreparties.co.
 export default auth;

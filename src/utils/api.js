@@ -89,11 +89,18 @@ class Api {
 };
 
 const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-22/',
+  url: 'http://api.yp.gks.mesto.nomoredomains.monster/',
   headers: {
-    authorization: 'fc55fa6a-67b0-4119-9d98-e2f765087414',
     'Content-Type': 'application/json; charset=UTF-8'
   }
 });
 
 export default api;
+
+// const api = new Api({
+//   url: 'https://mesto.nomoreparties.co/v1/cohort-22/',
+//   headers: {
+//     authorization: 'fc55fa6a-67b0-4119-9d98-e2f765087414',
+//     'Content-Type': 'application/json; charset=UTF-8'
+//   }
+// });
