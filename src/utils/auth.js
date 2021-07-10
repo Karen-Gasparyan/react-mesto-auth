@@ -53,6 +53,6 @@ class Auth {
   }
 }
 
-const auth = new Auth('http://api.yp.gks.mesto.nomoredomains.monster/');
+const auth = new Auth('http://yp.gks.mesto.nomoredomains.club/');
 // https://auth.nomoreparties.co.
 export default auth;
