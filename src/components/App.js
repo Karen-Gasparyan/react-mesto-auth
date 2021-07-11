@@ -69,7 +69,8 @@ function App() {
   /* /States */
 
 
-  /* validation */
+  /* useEffect's */
+  // validation
   useEffect(()=> {
     if (!email || !password || emailError || passwordError) {
       setValidForm(false);
@@ -89,6 +90,54 @@ function App() {
     }
   };
 
+  // token verification
+  useEffect(()=> {
+    if(localStorage.getItem('jwt')) {
+
+      const jwt = localStorage.getItem('jwt');
+      
+        auth.getContent(jwt)
+          .then(({data}) => {
+            setUserEmail(data.email);
+            setLoggedIn(true);
+            history.push('/');
+          })
+          .catch(errorMessage => console.log(errorMessage));
+    }
+  }, [history]);
+
+  // get user info
+  useEffect(()=> {
+    if(localStorage.getItem('jwt')) {
+
+      const token = localStorage.getItem('jwt');
+
+      api.getUserInfo(token)
+        .then(({ data }) => setCurrentUser(data))
+        .catch(error => {
+          setCurrentUser({
+            name: error,
+            about: 'Something went wrong',
+            avatar: 'https://www.wpfixit.com/wp-content/uploads/2019/03/HTTP-error-when-uploading-images-in-WordPress.jpg'
+          })
+        });
+    }
+  }, [loggedIn]);
+
+  // initial cards
+  useEffect(()=> {
+    if(localStorage.getItem('jwt')) {
+    const token = localStorage.getItem('jwt');
+
+    api.getInitialCards(token)
+    .then(({ data }) => setCards(data.reverse()))
+    .catch(error => setCardsError(`${error} - Something went wrong`));
+    }
+  }, [loggedIn]);
+  /* useEffect's */
+
+
+  /* validation */
   function handleChangePassword(e) {
     setPassword(e.target.value);
 
@@ -110,113 +159,111 @@ function App() {
   /* validation */
 
 
-  /* cards */
-  useEffect(()=> {
-    if(localStorage.getItem('jwt')) {
-
-    const token = localStorage.getItem('jwt');
-
-    api.getInitialCards(token)
-    .then(({ data }) => setCards(data))
-    .catch(error => setCardsError(`${error} - Something went wrong`));
-    }
-  }, []);
-
-  function handleCardLike(selectedСardLikes, selectedСardID) {
-    const isLiked = selectedСardLikes.some(otherUsers => otherUsers._id === currentUser._id);
-    
-    api.changeLike(selectedСardID, !isLiked)
-      .then(selectedСard => {
-        setCards(allCards => allCards.map(card => card._id === selectedСardID ? selectedСard : card));
-        setMessageIcon(true);
-    })
-    .catch(error => handleMessagePopup(`Something went wrong - ${error}`));
-    setMessageIcon(false);
-  };
-
-  function handleCardDelete(selectedСardID) {
-    api.deleteCard(selectedСardID)
-      .then(postDeleted => {
-        setCards(allCards => allCards.filter(card => card._id !== selectedСardID));
-        if(postDeleted) {
-          handleMessagePopup('Пост успешно удален');
-          setMessageIcon(true);
-        }
-      })
-      .catch(error => {
-        handleMessagePopup(`Something went wrong - ${error}`);
-        setMessageIcon(false);
-      });
-  };
-
-  function handleAddPlaceSubmit(newPlaceData) {
+  /* user info */
+  function handleUpdateAvatar(link) {
     setLoading(true);
 
-    api.setNewCard(newPlaceData)
-      .then(newCard => {
-        setCards([newCard, ...cards]);
-        setLoading(false);
-        closeAllPopups();
-      })
-      .catch(error => {
-        handleMessagePopup(`Something went wrong - ${error}`);
-        setMessageIcon(false);
-        setLoading(false);
-      });
-  };
-  /* /cards */
-
-
-  /* user info */
-  useEffect(()=> {
     if(localStorage.getItem('jwt')) {
 
       const token = localStorage.getItem('jwt');
 
-      api.getUserInfo(token)
-        .then(({ data }) => setCurrentUser(data))
+      api.setUserAvatar(token, link)
+        .then(({ data }) => {
+          setCurrentUser(data);
+          setLoading(false);
+          closeAllPopups();
+        })
         .catch(error => {
-          setCurrentUser({
-            name: error,
-            about: 'Something went wrong',
-            avatar: 'https://www.wpfixit.com/wp-content/uploads/2019/03/HTTP-error-when-uploading-images-in-WordPress.jpg'
-          })
+          handleMessagePopup(`Something went wrong - ${error}`);
+          setMessageIcon(false);
+          setLoading(false);
         });
     }
-  }, []);
-
-  function handleUpdateAvatar(link) {
-    setLoading(true);
-
-    api.setUserAvatar(link)
-      .then(newData => {
-        setCurrentUser(newData);
-        setLoading(false);
-        closeAllPopups();
-      })
-      .catch(error => {
-        handleMessagePopup(`Something went wrong - ${error}`);
-        setMessageIcon(false);
-        setLoading(false);
-      });
   };
 
   function handleUpdateUser({userName, about}) {
     setLoading(true);
 
-    api.setUserInfo(userName, about)
-      .then(newData => {
-        setCurrentUser(newData);
-        setLoading(false);
-        closeAllPopups();
-      })
-      .catch(error => {
-        handleMessagePopup(`Something went wrong - ${error}`);
-        setMessageIcon(false);
-        setLoading(false);
-      });
+    if(localStorage.getItem('jwt')) {
+
+      const token = localStorage.getItem('jwt');
+
+      api.setUserInfo(token, userName, about)
+        .then(({ data }) => {
+          setCurrentUser(data);
+          setLoading(false);
+          closeAllPopups();
+        })
+        .catch(error => {
+          handleMessagePopup(`Something went wrong - ${error}`);
+          setMessageIcon(false);
+          setLoading(false);
+        });
+    }
   };
   /* /user info */
+
+
+  /* cards */
+  function handleCardLike(selectedСardLikes, selectedСardID) {
+
+    const isLiked = selectedСardLikes.some(otherUsers => otherUsers === currentUser._id);
+
+    if(localStorage.getItem('jwt')) {
+
+      const token = localStorage.getItem('jwt');
+
+      api.changeLike(token, selectedСardID, !isLiked)
+        .then(({ data }) => {
+          setCards(allCards => allCards.map(card => card._id === selectedСardID ? data : card));
+          setMessageIcon(true);
+      })
+      .catch(error => handleMessagePopup(`Something went wrong - ${error}`));
+      setMessageIcon(false);
+    }
+  };
+
+  function handleCardDelete(selectedСardID) {
+    if(localStorage.getItem('jwt')) {
+
+    const token = localStorage.getItem('jwt');
+
+      api.deleteCard(token, selectedСardID)
+        .then(postDeleted => {
+          setCards(allCards => allCards.filter(card => card._id !== selectedСardID));
+          if(postDeleted) {
+            handleMessagePopup('Пост успешно удален');
+            setMessageIcon(true);
+          }
+        })
+        .catch(error => {
+          handleMessagePopup(`Something went wrong - ${error}`);
+          setMessageIcon(false);
+        });
+    }
+  };
+
+  function handleAddPlaceSubmit(newPlaceData) {
+    setLoading(true);
+
+    if(localStorage.getItem('jwt')) {
+
+      const token = localStorage.getItem('jwt');
+
+      api.setNewCard(token, newPlaceData)
+        .then(({ data }) => {
+          setCards([data, ...cards]);
+          setLoading(false);
+          closeAllPopups();
+        })
+        .catch(error => {
+          handleMessagePopup(`Something went wrong - ${error}`);
+          setMessageIcon(false);
+          setLoading(false);
+        });
+    }
+  };
+  /* /cards */
 
 
   /* popup's */
@@ -266,24 +313,6 @@ function App() {
     setMessageText('');
   };
   /* /popup's */
-
-
-  /* token verification */
-  useEffect(()=> {
-    if(localStorage.getItem('jwt')) {
-
-      const jwt = localStorage.getItem('jwt');
-      
-        auth.getContent(jwt)
-          .then(({data}) => {
-            setUserEmail(data.email);
-            setLoggedIn(true);
-            history.push('/');
-          })
-          .catch(errorMessage => console.log(errorMessage));
-    }
-  }, [history]);
-  /* /token verification */
 
 
   /* Auth */

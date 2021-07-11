@@ -52,13 +52,13 @@ function Main({
       <section
         className="elements content__elements"
         aria-label="Карточки, с фотографиями мест" >
-          {cardsError || cards.map((values)=>
+          {cardsError || cards.map(values =>
             (<Card
-                key={values._id}
-                cardValues={values}
-                onCardClick={onCardClick}
-                onCardLike={onCardLike}
-                onCardDelete={onCardDelete} />)
+              key={values._id}
+              cardValues={values}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete} />)
           )}
       </section>
     </div>

@@ -4,7 +4,6 @@ class Auth {
   }
 
   register =(email, password)=> {
-    console.log(email, password)
     return fetch(`${this.BASE_URL}signup`, {
       method: 'POST',
       headers: {
