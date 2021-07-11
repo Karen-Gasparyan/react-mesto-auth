@@ -1,7 +1,7 @@
 class Api {
   constructor(config) {
     this._url = config.url;
-    this._headers = config.headers;
+    // this._headers = config.headers;
   };
 
   _checkResponse(res) {
@@ -13,18 +13,24 @@ class Api {
   };
 
   /* GET */
-  getInitialCards() {
+  getInitialCards(token) {
     return fetch(`${this._url}cards`, {
       method: 'GET',
-      headers: this._headers
+      headers: {
+        "Authorization" : `Bearer ${token}`,
+        "Content-Type": "application/json; charset=UTF-8"
+      },
     })
     .then(this._checkResponse)
   };
 
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(`${this._url}users/me`, {
       method: 'GET',
-      headers: this._headers
+      headers: {
+        "Authorization" : `Bearer ${token}`,
+        "Content-Type": "application/json; charset=UTF-8"
+      },
     })
     .then(this._checkResponse)
   };
@@ -87,20 +93,24 @@ class Api {
   }
   /* /SET */
 };
-
+// http://localhost:3000/
+// https://api.yp.gks.mesto.nomoredomains.monster/
 const api = new Api({
-  url: 'http://api.yp.gks.mesto.nomoredomains.monster/',
-  headers: {
-    'Content-Type': 'application/json; charset=UTF-8'
-  }
+  url: 'http://localhost:5000/',
+  // Accept: "application/json",
+  // credentials: 'include',
+  // headers: {
+  //   // Authorization: localStorage.getItem('jwt'),
+  //   "Content-Type": "application/json; charset=UTF-8"
+  // },
 });
-
-export default api;
 
 // const api = new Api({
 //   url: 'https://mesto.nomoreparties.co/v1/cohort-22/',
 //   headers: {
-//     authorization: 'fc55fa6a-67b0-4119-9d98-e2f765087414',
+//      //authorization: 'fc55fa6a-67b0-4119-9d98-e2f765087414',
 //     'Content-Type': 'application/json; charset=UTF-8'
 //   }
 // });
+
+export default api;

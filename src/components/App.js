@@ -112,9 +112,14 @@ function App() {
 
   /* cards */
   useEffect(()=> {
-    api.getInitialCards()
-      .then(data => setCards(data))
-      .catch(error => setCardsError(`${error} - Something went wrong`));
+    if(localStorage.getItem('jwt')) {
+
+    const token = localStorage.getItem('jwt');
+
+    api.getInitialCards(token)
+    .then(({ data }) => setCards(data))
+    .catch(error => setCardsError(`${error} - Something went wrong`));
+    }
   }, []);
 
   function handleCardLike(selectedСardLikes, selectedСardID) {
@@ -164,17 +169,20 @@ function App() {
 
   /* user info */
   useEffect(()=> {
-    api.getUserInfo()
-      .then(userData => {
-        setCurrentUser(userData);
-      })
-      .catch(error => {
-        setCurrentUser({
-          name: error,
-          about: 'Something went wrong',
-          avatar: 'https://www.wpfixit.com/wp-content/uploads/2019/03/HTTP-error-when-uploading-images-in-WordPress.jpg'
-        })
-      });
+    if(localStorage.getItem('jwt')) {
+
+      const token = localStorage.getItem('jwt');
+
+      api.getUserInfo(token)
+        .then(({ data }) => setCurrentUser(data))
+        .catch(error => {
+          setCurrentUser({
+            name: error,
+            about: 'Something went wrong',
+            avatar: 'https://www.wpfixit.com/wp-content/uploads/2019/03/HTTP-error-when-uploading-images-in-WordPress.jpg'
+          })
+        });
+    }
   }, []);
 
   function handleUpdateAvatar(link) {

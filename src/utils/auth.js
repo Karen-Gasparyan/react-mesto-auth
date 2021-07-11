@@ -4,10 +4,11 @@ class Auth {
   }
 
   register =(email, password)=> {
+    console.log(email, password)
     return fetch(`${this.BASE_URL}signup`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({email, password})
     })
@@ -18,7 +19,7 @@ class Auth {
     return fetch(`${this.BASE_URL}signin`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({email, password})
     })
@@ -53,6 +54,7 @@ class Auth {
   }
 }
 
-const auth = new Auth('http://yp.gks.mesto.nomoredomains.club/');
+const auth = new Auth('http://localhost:5000/');
 // https://auth.nomoreparties.co.
+// https://api.yp.gks.mesto.nomoredomains.monster/
 export default auth;
