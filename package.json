@@ -14,7 +14,7 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "deploy": "npm run build && scp -r ./build/* karen-g-mesto@178.154.199.118:/home/karen-g-mesto/frontend-mesto",
+    "deploy": "npm run build && scp -r ./build/* mesto@178.154.240.216:/home/mesto/frontend-mesto",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

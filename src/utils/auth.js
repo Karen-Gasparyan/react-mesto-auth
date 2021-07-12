@@ -61,7 +61,7 @@ class Auth {
   }
 }
 
-const auth = new Auth('http://api.yp.gks.mesto.nomoredomains.monster/');
+const auth = new Auth('https://api.yp.gks.mesto.nomoredomains.monster/');
 // http://localhost:5000/
-// http://api.yp.gks.mesto.nomoredomains.monster/
+// https://api.yp.gks.mesto.nomoredomains.monster/
 export default auth;
