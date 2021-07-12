@@ -79,37 +79,24 @@ function App() {
     }
   }, [email, password, emailError, passwordError])
 
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-
-    if((e.target.name === 'email' && e.target.value.length < 6)) {
-      setEmailError('Email не должен содержать менее 6 символов');
-      setAuthDirty(true);
-    } else {
-      setEmailError('');
-    }
-  };
-
   // token verification
   useEffect(()=> {
     if(localStorage.getItem('jwt')) {
-
       const jwt = localStorage.getItem('jwt');
-      
-        auth.getContent(jwt)
-          .then(({data}) => {
-            setUserEmail(data.email);
-            setLoggedIn(true);
-            history.push('/');
-          })
-          .catch(errorMessage => console.log(errorMessage));
+
+      auth.getContent(jwt)
+        .then(({data}) => {
+          setUserEmail(data.email);
+          setLoggedIn(true);
+          history.push('/');
+        })
+        .catch(errorMessage => console.log(errorMessage));
     }
   }, [history]);
 
   // get user info
   useEffect(()=> {
     if(localStorage.getItem('jwt')) {
-
       const token = localStorage.getItem('jwt');
 
       api.getUserInfo(token)
@@ -137,7 +124,91 @@ function App() {
   /* useEffect's */
 
 
+  /* Auth */
+  const authData = {
+    email,
+    password,
+    emailError,
+    passwordError,
+    authDirty,
+    validForm,
+    handleChangeEmail,
+    handleChangePassword,
+    blurHandler
+  };
+
+  function handleSubmitLogin() {
+    setIsLoadingMessage(true);
+
+    auth.authorize(email, password)
+    .then(({token}) => {
+      if(token) {
+        localStorage.setItem('jwt', token);
+        setUserEmail(email);
+        setIsLoadingMessage(false);
+        setLoggedIn(true);
+        history.push('/');
+        return token;
+      }
+    })
+    .catch(errorMessage => {
+      setIsInfoTooltipIcon(false);
+      setIsLoadingMessage(false);
+      setIsInfoTooltip(true);
+      setMessageText(errorMessage);
+    });
+  }
+
+  function handleSubmitRegister() {
+    auth.register(email, password)
+    .then(({data}) => {
+      if(data) {
+        setUserEmail(data.email);
+        setIsInfoTooltipIcon(true);
+        setMessageText('Вы успешно зарегистрировались!');
+        setIsInfoTooltip(true);
+        resetAuthForms();
+        history.push('/signin');
+      }
+    })
+    .catch(res => {
+      setIsInfoTooltipIcon(false);
+      setMessageText(res);
+      setIsInfoTooltip(true);
+    });
+  };
+
+  const signOut =()=> {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    resetAuthForms();
+    setUserEmail('');
+    history.push('/');
+  }
+
+  const handleChangeLoginPage =()=> {
+    setLoginPage(false);
+  }
+
+  const resetAuthForms =()=> {
+    setEmail('');
+    setPassword('');
+  }
+  /* /Auth */
+
+
   /* validation */
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+
+    if((e.target.name === 'email' && e.target.value.length < 6)) {
+      setEmailError('Email не должен содержать менее 6 символов');
+      setAuthDirty(true);
+    } else {
+      setEmailError('');
+    }
+  };
+
   function handleChangePassword(e) {
     setPassword(e.target.value);
 
@@ -206,11 +277,9 @@ function App() {
 
   /* cards */
   function handleCardLike(selectedСardLikes, selectedСardID) {
-
     const isLiked = selectedСardLikes.some(otherUsers => otherUsers === currentUser._id);
 
     if(localStorage.getItem('jwt')) {
-
       const token = localStorage.getItem('jwt');
 
       api.changeLike(token, selectedСardID, !isLiked)
@@ -226,20 +295,20 @@ function App() {
   function handleCardDelete(selectedСardID) {
     if(localStorage.getItem('jwt')) {
 
-    const token = localStorage.getItem('jwt');
+      const token = localStorage.getItem('jwt');
 
-      api.deleteCard(token, selectedСardID)
-        .then(postDeleted => {
-          setCards(allCards => allCards.filter(card => card._id !== selectedСardID));
-          if(postDeleted) {
-            handleMessagePopup('Пост успешно удален');
-            setMessageIcon(true);
-          }
-        })
-        .catch(error => {
-          handleMessagePopup(`Something went wrong - ${error}`);
-          setMessageIcon(false);
-        });
+        api.deleteCard(token, selectedСardID)
+          .then(postDeleted => {
+            setCards(allCards => allCards.filter(card => card._id !== selectedСardID));
+            if(postDeleted) {
+              handleMessagePopup('Пост успешно удален');
+              setMessageIcon(true);
+            }
+          })
+          .catch(error => {
+            handleMessagePopup(`Something went wrong - ${error}`);
+            setMessageIcon(false);
+          });
     }
   };
 
@@ -247,7 +316,6 @@ function App() {
     setLoading(true);
 
     if(localStorage.getItem('jwt')) {
-
       const token = localStorage.getItem('jwt');
 
       api.setNewCard(token, newPlaceData)
@@ -313,80 +381,6 @@ function App() {
     setMessageText('');
   };
   /* /popup's */
-
-
-  /* Auth */
-  const authData = {
-    email,
-    password,
-    emailError,
-    passwordError,
-    authDirty,
-    validForm,
-    handleChangeEmail,
-    handleChangePassword,
-    blurHandler
-  };
-
-  function handleSubmitLogin() {
-    setIsLoadingMessage(true);
-
-      auth.authorize(email, password)
-      .then(({token}) => {
-        if(token) {
-          localStorage.setItem('jwt', token);
-          setUserEmail(email);
-          setIsLoadingMessage(false);
-          setLoggedIn(true);
-          history.push('/');
-          return token;
-        }
-      }
-    )
-    .catch(errorMessage => {
-      setIsInfoTooltipIcon(false);
-      setIsLoadingMessage(false);
-      setIsInfoTooltip(true);
-      setMessageText(errorMessage);
-    });
-  }
-
-  function handleSubmitRegister() {
-      auth.register(email, password)
-      .then(({data}) => {
-        if(data) {
-          setUserEmail(data.email);
-          setIsInfoTooltipIcon(true);
-          setMessageText('Вы успешно зарегистрировались!');
-          setIsInfoTooltip(true);
-          resetAuthForms();
-          history.push('/signin');
-        }
-      })
-      .catch(() => {
-        setIsInfoTooltipIcon(false);
-        setMessageText('Некорректно заполнено одно из полей!');
-        setIsInfoTooltip(true);
-      });
-    };
-
-  const signOut =()=> {
-    localStorage.removeItem('jwt');
-    setLoggedIn(false);
-    resetAuthForms();
-    setUserEmail('');
-    history.push('/');
-  }
-
-  const handleChangeLoginPage =()=> {
-    setLoginPage(false);
-  }
-
-  const resetAuthForms =()=> {
-    setEmail('');
-    setPassword('');
-  }
-  /* /Auth */
 
 
   /* helpers */

@@ -11,14 +11,18 @@ class Api {
     }
   };
 
+  _headerHeandler(token) {
+    return {
+      "Authorization" : `Bearer ${token}`,
+      "Content-Type": "application/json; charset=UTF-8"
+    };
+  }
+
   /* GET */
   getInitialCards(token) {
     return fetch(`${this._url}cards`, {
       method: 'GET',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token)
     })
     .then(this._checkResponse)
   };
@@ -26,24 +30,17 @@ class Api {
   getUserInfo(token) {
     return fetch(`${this._url}users/me`, {
       method: 'GET',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token)
     })
     .then(this._checkResponse)
   };
   /* /GET */
 
-
   /* SET */
   setUserAvatar(token, link) {
     return fetch(`${this._url}users/me/avatar`, {
       method: 'PATCH',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token),
       body: JSON.stringify({ avatar: link })
     })
     .then(this._checkResponse)
@@ -52,10 +49,7 @@ class Api {
   setUserInfo(token, name, about) {
     return fetch(`${this._url}users/me`, {
       method: 'PATCH',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token),
       body: JSON.stringify({ name, about })
     })
     .then(this._checkResponse)
@@ -64,10 +58,7 @@ class Api {
   setNewCard(token, data) {
     return fetch(`${this._url}cards`, {
       method: 'POST',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token),
       body: JSON.stringify(data)
     })
     .then(this._checkResponse)
@@ -76,10 +67,7 @@ class Api {
   deleteCard(token, id) {
     return fetch(`${this._url}cards/${id}`, {
       method: 'DELETE',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token),
       body: JSON.stringify({ _id: id })
     })
     .then(this._checkResponse)
@@ -89,27 +77,20 @@ class Api {
     if(isLiked) {
       return fetch(`${this._url}cards/${id}/likes`, {
       method: 'PUT',
-      headers: {
-        "Authorization" : `Bearer ${token}`,
-        "Content-Type": "application/json; charset=UTF-8"
-      },
+      headers: this._headerHeandler(token)
     })
       .then(this._checkResponse)
     } else {
         return fetch(`${this._url}cards/${id}/likes`, {
           method: 'DELETE',
-          headers: {
-            "Authorization" : `Bearer ${token}`,
-            "Content-Type": "application/json; charset=UTF-8"
-          },
+          headers: this._headerHeandler(token)
         })
           .then(this._checkResponse)
     }
   }
   /* /SET */
 };
-// http://localhost:3000/
-// https://api.yp.gks.mesto.nomoredomains.monster/
-const api = new Api({ url: 'http://localhost:5000/' });
+
+const api = new Api({url: 'http://api.yp.gks.mesto.nomoredomains.monster/'});
 
 export default api;

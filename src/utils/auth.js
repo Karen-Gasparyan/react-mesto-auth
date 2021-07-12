@@ -11,7 +11,15 @@ class Auth {
       },
       body: JSON.stringify({email, password})
     })
-    .then(res => res.status === 400 ? Promise.reject() : res.json())
+    .then(res => {
+      if (res.status === 400) {
+        return Promise.reject('Некорректно заполнено одно из полей');
+      } else if (res.status === 409) {
+        return Promise.reject('Пользователь с таким email уже зарегистрирован');
+      } else {
+        return res.json()
+      }
+    })
   }
 
   authorize =(email, password)=> {
@@ -23,10 +31,10 @@ class Auth {
       body: JSON.stringify({email, password})
     })
     .then(res => {
-      if(res.status === 400) {
-        return Promise.reject('Не передано одно из полей');
-      } else if(res.status === 401) {
-        return Promise.reject('Пользователь с email не найден');
+      if (res.status === 400) {
+        return Promise.reject('Некорректно заполнено одно из полей');
+      } else if (res.status === 401) {
+        return Promise.reject('Неправильные почта или пароль');
       } else {
         return res.json();
       }
@@ -53,7 +61,6 @@ class Auth {
   }
 }
 
-const auth = new Auth('http://localhost:5000/');
-// https://auth.nomoreparties.co.
-// https://api.yp.gks.mesto.nomoredomains.monster/
+const auth = new Auth('http://api.yp.gks.mesto.nomoredomains.monster/');
+
 export default auth;
