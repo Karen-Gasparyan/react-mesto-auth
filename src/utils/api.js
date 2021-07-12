@@ -1,6 +1,6 @@
 class Api {
-  constructor(config) {
-    this._url = config.url;
+  constructor(url) {
+    this._BASE_URL = url;
   };
 
   _checkResponse(res) {
@@ -20,7 +20,7 @@ class Api {
 
   /* GET */
   getInitialCards(token) {
-    return fetch(`${this._url}cards`, {
+    return fetch(`${this._BASE_URL}cards`, {
       method: 'GET',
       headers: this._headerHeandler(token)
     })
@@ -28,7 +28,7 @@ class Api {
   };
 
   getUserInfo(token) {
-    return fetch(`${this._url}users/me`, {
+    return fetch(`${this._BASE_URL}users/me`, {
       method: 'GET',
       headers: this._headerHeandler(token)
     })
@@ -38,7 +38,7 @@ class Api {
 
   /* SET */
   setUserAvatar(token, link) {
-    return fetch(`${this._url}users/me/avatar`, {
+    return fetch(`${this._BASE_URL}users/me/avatar`, {
       method: 'PATCH',
       headers: this._headerHeandler(token),
       body: JSON.stringify({ avatar: link })
@@ -47,7 +47,7 @@ class Api {
   };
 
   setUserInfo(token, name, about) {
-    return fetch(`${this._url}users/me`, {
+    return fetch(`${this._BASE_URL}users/me`, {
       method: 'PATCH',
       headers: this._headerHeandler(token),
       body: JSON.stringify({ name, about })
@@ -56,7 +56,7 @@ class Api {
   };
 
   setNewCard(token, data) {
-    return fetch(`${this._url}cards`, {
+    return fetch(`${this._BASE_URL}cards`, {
       method: 'POST',
       headers: this._headerHeandler(token),
       body: JSON.stringify(data)
@@ -65,7 +65,7 @@ class Api {
   };
 
   deleteCard(token, id) {
-    return fetch(`${this._url}cards/${id}`, {
+    return fetch(`${this._BASE_URL}cards/${id}`, {
       method: 'DELETE',
       headers: this._headerHeandler(token),
       body: JSON.stringify({ _id: id })
@@ -75,13 +75,13 @@ class Api {
 
   changeLike(token, id, isLiked) {
     if(isLiked) {
-      return fetch(`${this._url}cards/${id}/likes`, {
+      return fetch(`${this._BASE_URL}cards/${id}/likes`, {
       method: 'PUT',
       headers: this._headerHeandler(token)
     })
       .then(this._checkResponse)
     } else {
-        return fetch(`${this._url}cards/${id}/likes`, {
+        return fetch(`${this._BASE_URL}cards/${id}/likes`, {
           method: 'DELETE',
           headers: this._headerHeandler(token)
         })
@@ -91,6 +91,7 @@ class Api {
   /* /SET */
 };
 
-const api = new Api({url: 'https://api.yp.gks.mesto.nomoredomains.monster/'});
-
+const api = new Api('http://api.yp.gks.mesto.nomoredomains.monster/');
+// http://localhost:5000/
+// http://api.yp.gks.mesto.nomoredomains.monster/
 export default api;

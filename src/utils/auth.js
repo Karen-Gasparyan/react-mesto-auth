@@ -1,10 +1,10 @@
 class Auth {
   constructor(url) {
-    this.BASE_URL = url;
+    this._BASE_URL = url;
   }
 
   register =(email, password)=> {
-    return fetch(`${this.BASE_URL}signup`, {
+    return fetch(`${this._BASE_URL}signup`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -23,7 +23,7 @@ class Auth {
   }
 
   authorize =(email, password)=> {
-    return fetch(`${this.BASE_URL}signin`, {
+    return fetch(`${this._BASE_URL}signin`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -42,7 +42,7 @@ class Auth {
   }
 
   getContent =(token)=> {
-    return fetch(`${this.BASE_URL}users/me`, {
+    return fetch(`${this._BASE_URL}users/me`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -61,6 +61,7 @@ class Auth {
   }
 }
 
-const auth = new Auth('https://api.yp.gks.mesto.nomoredomains.monster/');
-
+const auth = new Auth('http://api.yp.gks.mesto.nomoredomains.monster/');
+// http://localhost:5000/
+// http://api.yp.gks.mesto.nomoredomains.monster/
 export default auth;
