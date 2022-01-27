@@ -91,7 +91,6 @@ class Api {
   /* /SET */
 };
 
-const api = new Api('https://api.yp.gks.mesto.nomoredomains.monster/');
-// http://localhost:5000/
-// https://api.yp.gks.mesto.nomoredomains.monster/
+const api = new Api('http://194.67.109.173/'); // http://localhost:5000/
+
 export default api;
