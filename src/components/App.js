@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
-import { HashRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import {HashRouter} from 'react-router-dom';
 
 import Header from './Header/Header';
 import Main from './Main';
