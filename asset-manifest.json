@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.234d278e.chunk.css",
-    "main.js": "/static/js/main.055ee5cb.chunk.js",
-    "main.js.map": "/static/js/main.055ee5cb.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.a9e98e4e.js",
-    "runtime-main.js.map": "/static/js/runtime-main.a9e98e4e.js.map",
-    "static/js/2.9798fe69.chunk.js": "/static/js/2.9798fe69.chunk.js",
-    "static/js/2.9798fe69.chunk.js.map": "/static/js/2.9798fe69.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.234d278e.chunk.css.map": "/static/css/main.234d278e.chunk.css.map",
-    "static/js/2.9798fe69.chunk.js.LICENSE.txt": "/static/js/2.9798fe69.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/static/media/plus-icon.d5d6f8af.svg",
-    "static/media/burger-menu.ccf70202.svg": "/static/media/burger-menu.ccf70202.svg",
-    "static/media/close-menu-Icon.ba016e89.svg": "/static/media/close-menu-Icon.ba016e89.svg",
-    "static/media/infoTooltip-done.a9eb6caf.svg": "/static/media/infoTooltip-done.a9eb6caf.svg",
-    "static/media/infoTooltip-error.d0f413bf.svg": "/static/media/infoTooltip-error.d0f413bf.svg"
+    "main.css": "/react-mesto-auth/static/css/main.f4ea2412.chunk.css",
+    "main.js": "/react-mesto-auth/static/js/main.02df306c.chunk.js",
+    "main.js.map": "/react-mesto-auth/static/js/main.02df306c.chunk.js.map",
+    "runtime-main.js": "/react-mesto-auth/static/js/runtime-main.1f304097.js",
+    "runtime-main.js.map": "/react-mesto-auth/static/js/runtime-main.1f304097.js.map",
+    "static/js/2.9b9ec6f1.chunk.js": "/react-mesto-auth/static/js/2.9b9ec6f1.chunk.js",
+    "static/js/2.9b9ec6f1.chunk.js.map": "/react-mesto-auth/static/js/2.9b9ec6f1.chunk.js.map",
+    "index.html": "/react-mesto-auth/index.html",
+    "static/css/main.f4ea2412.chunk.css.map": "/react-mesto-auth/static/css/main.f4ea2412.chunk.css.map",
+    "static/js/2.9b9ec6f1.chunk.js.LICENSE.txt": "/react-mesto-auth/static/js/2.9b9ec6f1.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/react-mesto-auth/static/media/plus-icon.d5d6f8af.svg",
+    "static/media/burger-menu.ccf70202.svg": "/react-mesto-auth/static/media/burger-menu.ccf70202.svg",
+    "static/media/close-menu-Icon.ba016e89.svg": "/react-mesto-auth/static/media/close-menu-Icon.ba016e89.svg",
+    "static/media/infoTooltip-done.a9eb6caf.svg": "/react-mesto-auth/static/media/infoTooltip-done.a9eb6caf.svg",
+    "static/media/infoTooltip-error.d0f413bf.svg": "/react-mesto-auth/static/media/infoTooltip-error.d0f413bf.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.a9e98e4e.js",
-    "static/js/2.9798fe69.chunk.js",
-    "static/css/main.234d278e.chunk.css",
-    "static/js/main.055ee5cb.chunk.js"
+    "static/js/runtime-main.1f304097.js",
+    "static/js/2.9b9ec6f1.chunk.js",
+    "static/css/main.f4ea2412.chunk.css",
+    "static/js/main.02df306c.chunk.js"
   ]
 }
