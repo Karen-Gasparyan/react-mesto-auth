@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
-import {HashRouter} from 'react-router-dom';
 
 import Header from './Header/Header';
 import Main from './Main';
@@ -398,102 +397,100 @@ function App() {
 
 
   return (
-    <HashRouter basename={process.env.PUBLIC_URL}>
-      <SpinnerContext.Provider value={loading} >
-        <CurrentUserContext.Provider value={currentUser} >
-          <div className="body">
-            <div className="page">
+    <SpinnerContext.Provider value={loading} >
+      <CurrentUserContext.Provider value={currentUser} >
+        <div className="body">
+          <div className="page">
 
-              <Header
-                component={Loged}
-                userEmail={userEmail}
-                loggedIn={loggedIn}
-                visibleHeaderMenu={visibleHeaderMenu}
-                signOut={signOut}
-                changeHeaderMenu={changeHeaderMenu}
-                headerMenuBurger={headerMenuBurger}
-                loginPage={loginPage}
-                handleChangeLoginPage={handleChangeLoginPage} />
+            <Header
+              component={Loged}
+              userEmail={userEmail}
+              loggedIn={loggedIn}
+              visibleHeaderMenu={visibleHeaderMenu}
+              signOut={signOut}
+              changeHeaderMenu={changeHeaderMenu}
+              headerMenuBurger={headerMenuBurger}
+              loginPage={loginPage}
+              handleChangeLoginPage={handleChangeLoginPage} />
 
-                <Switch>
-                  <Route path='/signin'>
-                    <Login
-                      authData={authData}
-                      handleSubmitLogin={handleSubmitLogin}
-                      setLoginPage={setLoginPage} />
-                  </Route>
+              <Switch>
+                <Route path='/signin'>
+                  <Login
+                    authData={authData}
+                    handleSubmitLogin={handleSubmitLogin}
+                    setLoginPage={setLoginPage} />
+                </Route>
 
-                  <Route path='/signup'>
-                    <Register
-                      authData={authData}
-                      handleSubmitRegister={handleSubmitRegister} />
-                  </Route>
+                <Route path='/signup'>
+                  <Register
+                    authData={authData}
+                    handleSubmitRegister={handleSubmitRegister} />
+                </Route>
 
-                  <ProtectedRoute
-                    exact
-                    path="/"
-                    component={Main}
-                    loggedIn={loggedIn}
-                    onEditAvatar={handleEditAvatarClick}
-                    onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
-                    onCardClick={handleCardClick} 
-                    cards={cards}
-                    cardsError={cardsError}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDelete} />
+                <ProtectedRoute
+                  exact
+                  path="/"
+                  component={Main}
+                  loggedIn={loggedIn}
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardClick={handleCardClick} 
+                  cards={cards}
+                  cardsError={cardsError}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete} />
 
-                  <Route>
-                    {loggedIn ? <Redirect to='/' /> : <Redirect to='/signin' />}
-                  </Route>
-                </Switch>
+                <Route>
+                  {loggedIn ? <Redirect to='/' /> : <Redirect to='/signin' />}
+                </Route>
+              </Switch>
 
-              <Footer />
+            <Footer />
 
-              <EditAvatarPopup
-                isOpen={isEditAvatarPopupOpen}
-                onClose={closeAllPopups}
-                onUpdateAvatar={handleUpdateAvatar}
-                loading={loading}
-                resetForms={resetForms} />
-              
-              <EditProfilePopup
-                isOpen={isEditProfilePopupOpen}
-                onClose={closeAllPopups}
-                onUpdateUser={handleUpdateUser}
-                loading={loading}
-                resetForms={resetForms} /> 
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+              loading={loading}
+              resetForms={resetForms} />
+            
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+              loading={loading}
+              resetForms={resetForms} /> 
 
-              <AddPlacePopup
-                isOpen={isAddPlacePopupOpen}
-                onClose={closeAllPopups}
-                onAddPlace={handleAddPlaceSubmit}
-                loading={loading}
-                resetForms={resetForms} />
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlaceSubmit}
+              loading={loading}
+              resetForms={resetForms} />
 
-              <ImagePopup
-                card={selectedCard}
-                onClose={closeAllPopups} />
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopups} />
 
-              <MessagePopup
-                messageIcon={messageIcon}
-                title={messageText}
-                isOpen={isMessagePopup} />
+            <MessagePopup
+              messageIcon={messageIcon}
+              title={messageText}
+              isOpen={isMessagePopup} />
 
-              <LoadingMessage
-                isOpen={isLoadingMessage} />
+            <LoadingMessage
+              isOpen={isLoadingMessage} />
 
-              <InfoTooltip
-                isOpen={isInfoTooltip}
-                onClose={closeAllPopups}
-                isDone={isInfoTooltipStatus}
-                messageText={messageText} />
-              
-            </div>
+            <InfoTooltip
+              isOpen={isInfoTooltip}
+              onClose={closeAllPopups}
+              isDone={isInfoTooltipStatus}
+              messageText={messageText} />
+            
           </div>
-        </CurrentUserContext.Provider>
-      </SpinnerContext.Provider>
-    </HashRouter>
+        </div>
+      </CurrentUserContext.Provider>
+    </SpinnerContext.Provider>
   );
 };
 

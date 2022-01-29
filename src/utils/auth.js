@@ -61,6 +61,6 @@ class Auth {
   }
 }
 
-const auth = new Auth('http://194.67.109.173/'); // http://localhost:5000/
+const auth = new Auth('http://yp-express-mesto-api.xyz/'); // http://localhost:5000/
 
 export default auth;

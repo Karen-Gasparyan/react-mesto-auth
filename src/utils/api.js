@@ -91,6 +91,6 @@ class Api {
   /* /SET */
 };
 
-const api = new Api('http://194.67.109.173/'); // http://localhost:5000/
+const api = new Api('http://yp-express-mesto-api.xyz/'); // http://localhost:5000/
 
 export default api;
